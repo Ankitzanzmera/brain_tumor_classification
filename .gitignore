@@ -8,6 +8,7 @@ __pycache__/
 
 #personel
 notes/
+logs/
 
 # Distribution / packaging
 .Python

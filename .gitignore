@@ -8,7 +8,13 @@ __pycache__/
 
 #personel
 notes/
+<<<<<<< HEAD
 logs/
+artifacts
+artifacts/data_ingestion/brain_tumor_data/train/pituitary
+
+=======
+>>>>>>> parent of d2b074d (logger and exception)
 
 # Distribution / packaging
 .Python

@@ -1,7 +1,8 @@
 from brain_tumor_classification.constants import *
 from brain_tumor_classification.utils.logger import logger
 from brain_tumor_classification.utils.common import create_directories,read_yaml
-from brain_tumor_classification.entity.config_entity import DataIngestionConfig
+from brain_tumor_classification.entity.config_entity import (DataIngestionConfig,
+                                                            PrepareBaseModelConfig)
 
 class ConfigurationManager:
     def __init__(self,config_filepath = CONFIG_FILEPATH,params_filepath = PARAMS_FILEPATH):
@@ -25,4 +26,19 @@ class ConfigurationManager:
         logger.info('Stored Data ingestion config')
 
         return data_ingestion_config
-        
+    
+    def get_prepare_base_model_config(self):
+        temp_config = self.config.prepare_base_model
+
+        prepare_base_model_config = PrepareBaseModelConfig(
+            root_dir= Path(temp_config.root_dir),
+            base_model_path= Path(temp_config.base_model_path),
+            updated_base_model_path= Path(temp_config.updated_base_model_path),
+            params_image_size= self.params.IMAGE_SIZE,
+            params_weights= self.params.WEIGHTS,
+            params_include_top= self.params.INCLUDE_TOP,
+            params_classes= self.params.CLASSES,
+            params_learning_rate=self.params.LEARNING_RATE,
+        )
+        logger.info('Storing Prepare Base model Completed')
+        return prepare_base_model_config

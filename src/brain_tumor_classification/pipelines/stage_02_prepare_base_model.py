@@ -1,30 +1,30 @@
-import os,sys
+import sys
 from brain_tumor_classification.config.configuration import ConfigurationManager
-from brain_tumor_classification.components.stage_01_data_ingestion import DataIngestion
+from brain_tumor_classification.components.stage_02_prepare_base_model import PrepareBaseModel
 from brain_tumor_classification.utils.exception import CustomException
 from brain_tumor_classification.utils.logger import logger
 
-class DataIngestionPipeline:
+class PrepareBaseModelPipeline:
     def main(self):
         try:
             config = ConfigurationManager()
-            data_ingestion_config = config.get_data_ingestion_config()
-            data_ingestion = DataIngestion(data_ingestion_config)
-            data_ingestion.download_file()
-            data_ingestion.extract_file()   
+            prepare_base_model_config = config.get_prepare_base_model_config()
+            prepare_base_model = PrepareBaseModel(config=prepare_base_model_config)
+            prepare_base_model.get_base_model()
+            prepare_base_model.update_base_model()
         except Exception as e:
             raise CustomException(e,sys)
-    
-STAGE_NAME = "Data Ingestion"
+        
+
+
+STAGE_NAME = "Prepare Base Model"
 
 if  __name__ == "__main__":
     try:    
         logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>> {STAGE_NAME} Started <<<<<<<<<<<<<<<<<<<<<<<<<")
-        obj = DataIngestionPipeline()
+        obj = PrepareBaseModelPipeline()
         obj.main()
         logger.info(f">>>>>>>>>>>>>>>>>>>>>>>>> {STAGE_NAME} Completed <<<<<<<<<<<<<<<<<<<<<<<<<")
         logger.info('-'*70)
     except Exception as e:
         raise CustomException(e,sys)
-    
-

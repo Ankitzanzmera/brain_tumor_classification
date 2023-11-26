@@ -2,7 +2,8 @@ from brain_tumor_classification.constants import *
 from brain_tumor_classification.utils.logger import logger
 from brain_tumor_classification.utils.common import create_directories,read_yaml
 from brain_tumor_classification.entity.config_entity import (DataIngestionConfig,
-                                                            PrepareBaseModelConfig)
+                                                            PrepareBaseModelConfig,
+                                                            PrepareCallbackConfig)
 
 class ConfigurationManager:
     def __init__(self,config_filepath = CONFIG_FILEPATH,params_filepath = PARAMS_FILEPATH):
@@ -28,7 +29,9 @@ class ConfigurationManager:
         return data_ingestion_config
     
     def get_prepare_base_model_config(self):
+        
         temp_config = self.config.prepare_base_model
+        create_directories([temp_config.root_dir])
 
         prepare_base_model_config = PrepareBaseModelConfig(
             root_dir= Path(temp_config.root_dir),
@@ -42,3 +45,16 @@ class ConfigurationManager:
         )
         logger.info('Storing Prepare Base model Completed')
         return prepare_base_model_config
+    
+    def get_prepare_callback_config(self) -> PrepareCallbackConfig:
+        temp_config = self.config.prepare_callbacks
+
+        create_directories([temp_config.root_dir])
+
+        prepare_callback_config = PrepareCallbackConfig(
+            root_dir = temp_config.root_dir,
+            tensorboard_log_dir = temp_config.tensorboard_log_dir,
+            checkpoint_model_path = temp_config.checkpoint_model_path
+        )
+
+        return prepare_callback_config

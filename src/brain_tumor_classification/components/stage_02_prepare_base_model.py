@@ -1,5 +1,5 @@
 import tensorflow as tf
-from brain_tumor_classification.config.configuration import PrepareBaseModelConfig
+from brain_tumor_classification.entity.config_entity import PrepareBaseModelConfig
 from brain_tumor_classification.utils.logger import logger
 
 class PrepareBaseModel:

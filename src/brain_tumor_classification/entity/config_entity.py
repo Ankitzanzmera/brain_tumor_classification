@@ -18,3 +18,9 @@ class PrepareBaseModelConfig:
     params_include_top:bool
     params_classes: int
     params_learning_rate:float
+
+@dataclass(frozen=True)
+class PrepareCallbackConfig:
+    root_dir:Path
+    tensorboard_log_dir:Path
+    checkpoint_model_path: Path

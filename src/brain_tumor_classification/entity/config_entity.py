@@ -36,3 +36,10 @@ class ModelTrainingConfig:
     params_image_size: list
     params_batch_size: int
     params_epochs: int
+
+@dataclass(frozen=True)
+class ModelEvaluateConfig:
+    path_of_model:Path
+    test_data_path:Path
+    params_batch_size:int
+    params_image_size:list

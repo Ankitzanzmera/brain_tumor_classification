@@ -18,7 +18,7 @@ class ModelTrainingPipeline:
             model_training = ModelTraining(config = training_config)
             model_training.get_base_model()
             model_training.train_valid_generator()
-            model_training.train_model(callbacks_list = callbacks_list)
+            # model_training.train_model(callbacks_list = callbacks_list)
         except Exception as e:
             raise CustomException(e,sys)
 

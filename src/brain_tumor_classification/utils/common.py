@@ -4,6 +4,7 @@ from ensure import ensure_annotations
 from box import ConfigBox
 from box.exceptions import BoxValueError
 import yaml
+import json
 from brain_tumor_classification.utils.exception import CustomException
 
 
@@ -47,3 +48,14 @@ def get_size(path:Path) -> str:
     """
     size_in_kb = round(os.path.getsize(path) / 1024)
     return f"~ {size_in_kb} KB"
+
+@ensure_annotations
+def save_json(path: Path,data: dict):
+    """ 
+        Save The Json Data
+
+        input: Path of file and Data to write
+
+    """
+    with open(path,"w") as f:
+        json.dump(data,f,indent=4)

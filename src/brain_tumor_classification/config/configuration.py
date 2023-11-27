@@ -6,7 +6,8 @@ from brain_tumor_classification.utils.common import create_directories,read_yaml
 from brain_tumor_classification.entity.config_entity import (DataIngestionConfig,
                                                             PrepareBaseModelConfig,
                                                             PrepareCallbackConfig,
-                                                            ModelTrainingConfig)
+                                                            ModelTrainingConfig,
+                                                            ModelEvaluateConfig)
 
 class ConfigurationManager:
     def __init__(self,config_filepath = CONFIG_FILEPATH,params_filepath = PARAMS_FILEPATH):
@@ -82,3 +83,14 @@ class ConfigurationManager:
             params_epochs= params.EPOCHS        
         )
         return model_training_config
+    
+    def get_model_evaluate_config(self) -> ModelEvaluateConfig:
+
+        test_data_path = os.path.join(self.config.data_ingestion.unzip_dir,"brain_tumor_mris","Testing")
+        model_evaluate_config = ModelEvaluateConfig(
+            path_of_model= Path(self.config.model_training.trained_model_path),
+            test_data_path= Path(test_data_path),
+            params_batch_size= self.params.BATCH_SIZE,
+            params_image_size= self.params.IMAGE_SIZE
+        )
+        return model_evaluate_config

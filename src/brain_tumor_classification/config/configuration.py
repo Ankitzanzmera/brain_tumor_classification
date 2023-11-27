@@ -1,9 +1,12 @@
+import os
+from pathlib import Path
 from brain_tumor_classification.constants import *
 from brain_tumor_classification.utils.logger import logger
 from brain_tumor_classification.utils.common import create_directories,read_yaml
 from brain_tumor_classification.entity.config_entity import (DataIngestionConfig,
                                                             PrepareBaseModelConfig,
-                                                            PrepareCallbackConfig)
+                                                            PrepareCallbackConfig,
+                                                            ModelTrainingConfig)
 
 class ConfigurationManager:
     def __init__(self,config_filepath = CONFIG_FILEPATH,params_filepath = PARAMS_FILEPATH):
@@ -29,9 +32,7 @@ class ConfigurationManager:
         return data_ingestion_config
     
     def get_prepare_base_model_config(self):
-        
         temp_config = self.config.prepare_base_model
-        create_directories([temp_config.root_dir])
 
         prepare_base_model_config = PrepareBaseModelConfig(
             root_dir= Path(temp_config.root_dir),
@@ -42,6 +43,7 @@ class ConfigurationManager:
             params_include_top= self.params.INCLUDE_TOP,
             params_classes= self.params.CLASSES,
             params_learning_rate=self.params.LEARNING_RATE,
+
         )
         logger.info('Storing Prepare Base model Completed')
         return prepare_base_model_config
@@ -58,3 +60,25 @@ class ConfigurationManager:
         )
 
         return prepare_callback_config
+    
+    def get_model_training_config(self) -> ModelTrainingConfig:
+        temp_config = self.config.model_training
+        prepare_base_model = self.config.prepare_base_model
+        params = self.params
+        training_data_path = os.path.join(self.config.data_ingestion.unzip_dir,"brain_tumor_mris","Training")
+        validation_data_path = os.path.join(self.config.data_ingestion.unzip_dir,"brain_tumor_mris","Validation")
+
+        create_directories([temp_config.root_dir])
+        
+        model_training_config = ModelTrainingConfig(
+            root_dir= Path(temp_config.root_dir),
+            trained_model_path= Path(temp_config.trained_model_path),
+            updated_base_model= Path(prepare_base_model.updated_base_model_path),
+            training_data = Path(training_data_path),
+            validation_data= Path(validation_data_path),
+            params_is_augmentation= params.AUGMENTATION,
+            params_image_size= params.IMAGE_SIZE,
+            params_batch_size= params.BATCH_SIZE,
+            params_epochs= params.EPOCHS        
+        )
+        return model_training_config

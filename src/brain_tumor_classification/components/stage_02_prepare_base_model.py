@@ -7,29 +7,28 @@ class PrepareBaseModel:
         self.config = config
 
     def get_base_model(self):
-        self.model = tf.keras.applications.InceptionV3(
+        self.model = tf.keras.applications.VGG16(
             weights=self.config.params_weights,
             include_top = self.config.params_include_top,
             input_shape = self.config.params_image_size
-            )
+        )
         
         self.model.save(self.config.base_model_path)
-        logger.info('Base Model Saved Sucessfully')
-        
     
     @staticmethod
-    def _prepare_full_model(model:tf.keras.Model,classes:int,learning_rate: float,freeze_all: bool):
+    def _prepare_full_model(model:tf.keras.models,classes:int,learning_rate: float,freeze_all: bool):
         if freeze_all:
             for layer in model.layers:
                 model.trainable = False
+        for layer in model.layers:
+            print(layer.name,layer.trainable)
         
-        flatten_in = tf.keras.layers.Flatten()(model.output)
-        prediction = tf.keras.layers.Dense(units = classes,activation = "softmax")(flatten_in)
+        full_model = tf.keras.models.Sequential()
+        full_model.add(model)
+        full_model.add(tf.keras.layers.Flatten())
+        full_model.add(tf.keras.layers.Dense(256,activation = 'relu'))
+        full_model.add(tf.keras.layers.Dense(units = classes,activation = 'softmax'))
 
-        full_model = tf.keras.models.Model(
-            inputs = model.input,
-            outputs = prediction
-        )
 
         full_model.compile( 
             optimizer = tf.keras.optimizers.Adam(learning_rate = learning_rate),
@@ -48,4 +47,3 @@ class PrepareBaseModel:
             freeze_all = True
         )
         self.full_model.save(self.config.updated_base_model_path)
-        logger.info('Updated Base Model Saved Sucessfully')

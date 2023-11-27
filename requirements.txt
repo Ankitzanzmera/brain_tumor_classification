@@ -1,8 +1,12 @@
+numpy
+pandas
+seaborn
+matplotlib
+scipy   
 flask
 flask-cors
 joblib
 tensorflow
-pandas 
 dvc
 python-box
 ensure

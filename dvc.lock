@@ -1,0 +1,46 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python src/brain_tumor_classification/pipelines/stage_01_data_ingestion.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: b64207b176a02ba210959fdac2a2053d
+      size: 787
+    - path: src/brain_tumor_classification/pipelines/stage_01_data_ingestion.py
+      hash: md5
+      md5: 5bd0f42ecd0f02b7be99a4d90dc8dba1
+      size: 1175
+    outs:
+    - path: artifacts/data_ingestion/brain_tumor_mris
+      hash: md5
+      md5: df3205296d9a955f172cb73c5df85faf.dir
+      size: 135831161
+      nfiles: 5824
+  prepare_base_model:
+    cmd: python src/brain_tumor_classification/pipelines/stage_02_prepare_base_model.py
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: b64207b176a02ba210959fdac2a2053d
+      size: 787
+    - path: src/brain_tumor_classification/pipelines/stage_02_prepare_base_model.py
+      hash: md5
+      md5: ff55c7f9a5a8b709a14d3d78a9558ba3
+      size: 1224
+    params:
+      params.yaml:
+        CLASSES: 4
+        IMAGE_SIZE:
+        - 224
+        - 224
+        - 3
+        INCLUDE_TOP: false
+        LEARNING_RATE: 0.01
+        WEIGHTS: imagenet
+    outs:
+    - path: artifacts/prepare_base_model
+      hash: md5
+      md5: d1233e659a63806af9f4fd1364760b23.dir
+      size: 143540816
+      nfiles: 2
